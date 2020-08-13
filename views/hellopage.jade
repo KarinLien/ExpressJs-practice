@@ -1,0 +1,11 @@
+extends layout
+
+block content
+ 
+  -console.log('data!!!!!!:' + data.username)
+  p   hi!!! #{JSON.stringify(data.username)}
+  form(action="/submit-student-data",method="post")
+    input(type="text",name="name" value="")
+    input(type="text",name="address" value="")
+    input(type="submit", value="submit") 
+   

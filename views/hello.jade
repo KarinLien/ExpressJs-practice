@@ -1,0 +1,30 @@
+extends layout
+
+block content
+
+
+
+  h2= name
+  p Welcome to   
+  p #{items}
+  -var books = 'books'
+  -var colors=['red','yellow','orange','blue','black'] 
+  p #{books}
+  ul
+    each item in items
+         li= item
+  br       
+  - colors.forEach(function(item) {
+  p.color= item
+  - })
+  p  tag:#{tag}
+  if tag
+     p hello!!!
+  else
+     p oh no! didnt work!! 
+
+  p helloooooo!!!
+
+  form(action="/hello1",method="post")
+   input(type="text",name="name" value="harry")
+   input(type="submit", value="submit")

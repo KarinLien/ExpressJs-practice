@@ -1,0 +1,146 @@
+[
+ {
+  "username": "BROWN",
+  "password": "brown12345",
+  "email": "brown@mail.com",
+  "uid": 101,
+  "age": "28",
+  "address": "taiwan",
+  "phone": "1234567890"
+ },
+ {
+  "username": "CHOW",
+  "password": "chow1234",
+  "email": "chow@mail.com",
+  "uid": 102,
+  "age": "33",
+  "address": "taiwan",
+  "phone": "123445678"
+ },
+ {
+  "username": "RYAN",
+  "password": "ryan12345",
+  "email": "ryan@mail.com",
+  "uid": 103,
+  "age": "25",
+  "address": "KR",
+  "phone": "1234565667"
+ },
+ {
+  "username": "STARK",
+  "password": "stark1234",
+  "email": "stark@mail.com",
+  "uid": 104,
+  "age": "22",
+  "address": "US",
+  "phone": "1123124"
+ },
+ {
+  "username": "BMO",
+  "password": "bmo123455",
+  "email": "bmo@mail.com",
+  "uid": 105,
+  "age": "4",
+  "address": "US",
+  "phone": "213439893"
+ },
+ {
+  "username": "PIPI",
+  "password": "pipi1234",
+  "email": "pipi@mail.com",
+  "uid": 106,
+  "age": "3",
+  "address": "UK",
+  "phone": "123124235"
+ },
+ {
+  "username": "KAI",
+  "password": "kai1234",
+  "email": "kai@gmail.com",
+  "uid": 107,
+  "age": "4",
+  "address": "EU",
+  "phone": "123435434534"
+ },
+ {
+  "username": "LIN",
+  "password": "lin1234",
+  "email": "lin@jjodk.com",
+  "uid": 108,
+  "age": "2",
+  "address": "JP",
+  "phone": "21312109"
+ },
+ {
+  "username": "LOLO",
+  "password": "lolo1231",
+  "email": "123213@kod.com",
+  "uid": 109,
+  "age": "2",
+  "address": "2dqwq",
+  "phone": "21131241"
+ },
+ {
+  "username": "ASDAS",
+  "password": "asdasd",
+  "email": "qqq@qwe",
+  "uid": 110,
+  "age": "121",
+  "address": "121wqe",
+  "phone": "12312"
+ },
+ {
+  "username": "QWQW",
+  "password": "qweqw",
+  "email": "ssdf@dfsd",
+  "uid": 111,
+  "age": "qweq",
+  "address": "qweqwq",
+  "phone": "weqw"
+ },
+ {
+  "username": "QWEQW",
+  "password": "qweqw",
+  "email": "qqq@qweqw",
+  "uid": 112,
+  "age": "qweq",
+  "address": "qweqw",
+  "phone": "qewqeqw"
+ },
+ {
+  "username": "QWEQW",
+  "password": "qweqweq",
+  "email": "ssdf@dfsdq",
+  "uid": 113,
+  "age": "wqweqw",
+  "address": "qwqweq",
+  "phone": "qweqe"
+ },
+ {
+  "username": "QWQW",
+  "password": "qewqe",
+  "email": "qqq@qwe",
+  "uid": 114,
+  "age": "qweqw",
+  "address": "qwqwq",
+  "phone": "weqweq"
+ },
+ {
+  "username": "QWEQW",
+  "password": "qweqweq",
+  "email": "qwe@sdwde",
+  "uid": 115,
+  "age": "waeawe",
+  "address": "awae",
+  "phone": "waeae"
+ },
+ {
+  "username": "AWAEA",
+  "password": "eawea",
+  "email": "qqq@qwe",
+  "uid": 116,
+  "age": "aweae",
+  "address": "awae",
+  "phone": "aweawew"
+ }
+]

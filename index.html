@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>hey</title>
+  </head>
+  <body>
+    <h2>HEY</h2>
+    <div class="searchBar">
+        <input id="search-value" name="search" type="search" class="searchBar-input"/><button type="button" onclick="postSearchValue(true)">SUBMIT</button>
+    </div>
+    <div class="view-all-btn text-center" onclick="postSearchValue(false)"><span>顯示全部</span></div>
+    <div style="display: flex">
+        <div>
+            <img src="img/icons8-bmo-48.png" alt="Bmo">
+          </div>
+          <div>
+              <img src="img/icons8-jake-48.png" alt="Jake">
+          </div>
+    </div>
+   
+    <div onclick="addUser()" class="addUser-Btn cursor">ADD USER</div>
+    <div id="formAdd" style="margin: 20px">
+      <form>
+        <div class="form-div">
+          <label>username:</label>
+          <input type="text" name="username" value="" id="usernameId"/>
+        </div>
+        <div class="form-div">
+          <label>password:</label>
+          <input type="password" name="username" value="" id="passwordId"/>
+        </div>
+       <div class="email-div">
+        <div class="form-div margin-for-email">
+          <label>email:</label>
+          <input type="email" name="email" value="" id="emailId"/>
+        </div>
+        <button type="button" onclick="ckeckEmailUse()">檢查是否有使用過</button>
+        <div id="forCheck" class="for-check"></div>
+       </div>
+        
+      
+        <div class="form-div">
+          <label>age:</label>
+          <input type="text" name="age" value="" id="ageId"/>
+        </div class="form-div">
+        <div class="form-div">
+          <label>address:</label>
+          <input type="text" name="address" value="" id="addressId"/>
+        </div class="form-div">
+        <div class="form-div">
+          <label>phone:</label>
+          <input type="text" name="phone" value="" id="phoneId"/>
+        </div>
+       <div class="form-div cursor" onclick="send()"><span>SUBMIT</span></div> 
+      </form>
+    </div>
+    <div>
+        <div class="table-title">
+            <div class="text-center">ID</div>
+            <div class="text-center">NAME</div>
+            <div class="text-center">AGE</div>
+            <div class="text-center">PHONE</div>
+            <div class="text-center">E-MAIL</div>
+        </div>
+        <div id="table">
+        </div>
+
+          <div id="listingTable"></div>
+<a href="javascript:prevPage()" id="btn_prev">Prev</a>
+<a href="javascript:nextPage()" id="btn_next">Next</a>
+page: <span id="page"></span>
+    </div>
+    
+  </body>
+  <script>
+     var port = '2999'
+    
+    async function ckeckEmailUse(){
+      var emailValue = document.getElementById("emailId").value;
+      var checkContent = document.getElementById('forCheck');
+      const data = await fetch(`http://127.0.0.1:${port}/api/post/checkmail`,{
+      method: "POST", // or 'PUT'
+      body: JSON.stringify({emailValue}), // data can be `string` or {object}!
+      headers: new Headers({
+        "Content-Type": "application/json"
+        })
+      }).then(res=>res.json()).then(json=>{
+      checkContent.innerHTML = json.content 
+      setTimeout(function(){ checkContent.innerHTML = '' }, 3000);
+     })
+    }
+       
+
+    function deleteUser(uid) {
+      var url = `http://127.0.0.1:${port}/api/student/${uid}`;
+      fetch(url, {
+        method: "DELETE",
+        headers: new Headers({
+          "Content-Type": "application/json"
+        })
+      })
+        .then(res => {
+          if (res.status === 200) {
+            changePage(current_page)
+          }
+        })
+        .catch(err => console.error(err));
+    }
+
+    function send() {
+    var url = `http://127.0.0.1:${port}/api/post/student`;
+    var nameValue = document.getElementById("usernameId").value;
+    var passwordValue = document.getElementById('passwordId').value;
+    var emailValue = document.getElementById("emailId").value;
+    var ageValue = document.getElementById('ageId').value;
+    var addressValue = document.getElementById('addressId').value;
+    var phoneValue = document.getElementById('phoneId').value;
+
+    var data = { username: nameValue,password:passwordValue, email: emailValue,age:ageValue,address:addressValue,phone:phoneValue };
+    
+    if(nameValue && passwordValue && emailValue){
+    
+      fetch(url, {
+      method: "POST", // or 'PUT'
+      body: JSON.stringify(data), // data can be `string` or {object}!
+      headers: new Headers({
+        "Content-Type": "application/json"
+      })
+    })
+      .then(res => {
+        changePage(current_page);
+        document.getElementById("usernameId").value ='';
+        document.getElementById('passwordId').value = '';
+        document.getElementById("emailId").value = '';
+        document.getElementById('ageId').value = '';
+        document.getElementById('addressId').value = '';
+        document.getElementById('phoneId').value = '';    
+      })
+      .catch(error => console.error("Error:", error))
+    }else if(!nameValue || !passwordValue || !emailValue){
+        alert('不能為空')
+    }
+    
+    }
+ 
+   async  function modifyUser(uid){
+     const form = document.getElementById('formAdd')
+     try{
+        const response = await fetch(`http://127.0.0.1:${port}/api/student/${uid}`)
+        const data = await response.json();
+        
+        document.getElementById('formAdd').innerHTML = `
+        <form>
+        <div class="form-div">
+          <label>username:</label>
+          <input type="text" name="username" value='${data.username}' id="usernameId"/>
+        </div>
+        <div class="form-div">
+          <label>password:</label>
+          <input type="password" name="username" value="${data.password}" id="passwordId"/>
+        </div>
+        <div class="form-div">
+          <label>email:</label>
+          <input type="email" name="email" value="${data.email}" id="emailId"  disabled="disabled"/>
+        </div>
+        <div class="form-div">
+          <label>age:</label>
+          <input type="text" name="age" value="${data.age}" id="ageId"/>
+        </div class="form-div">
+        <div class="form-div">
+          <label>address:</label>
+          <input type="text" name="address" value="${data.address}" id="addressId"/>
+        </div class="form-div">
+        <div class="form-div">
+          <label>phone:</label>
+          <input type="text" name="phone" value="${data.phone}" id="phoneId"/>
+        </div>
+       <div class="form-div" onclick="sendModify('${data.uid}')"><span>SUBMIT</span></div> 
+        `
+       }catch (err){
+        console.log('fetch failed',err)
+       }
+     }
+
+ function sendModify(uid){
+    var url = `http://127.0.0.1:${port}/api/post/student/${uid}`;
+    var nameValue = document.getElementById("usernameId").value;
+    var passwordValue = document.getElementById('passwordId').value;
+    var emailValue = document.getElementById("emailId").value;
+    
+    var ageValue = document.getElementById('ageId').value;
+    var addressValue = document.getElementById('addressId').value;
+    var phoneValue = document.getElementById('phoneId').value;
+
+    var data = { uid:uid,username:nameValue,password:passwordValue, email:emailValue,age:ageValue,address:addressValue,phone:phoneValue };
+    fetch(url, {
+      method: "POST", // or 'PUT'
+      body: JSON.stringify(data), // data can be `string` or {object}!
+      headers: new Headers({
+        "Content-Type": "application/json"
+      })
+    })
+      .then(res => {
+        changePage(current_page) ;
+        document.getElementById("usernameId").value ='';
+        document.getElementById('passwordId').value = '';
+        document.getElementById("emailId").value = '';
+        document.getElementById('ageId').value = '';
+        document.getElementById('addressId').value = '';
+        document.getElementById('phoneId').value = '';
+        document.getElementById("emailId").disabled = false ;
+      })
+      .catch(error => console.error("Error:", error))
+    }
+
+    function addUser() {
+      document.getElementById('formAdd').innerHTML = `
+        <form>
+        <div class="form-div">
+          <label>username:</label>
+          <input type="text" name="username" value='' id="usernameId"/>
+        </div>
+        <div class="form-div">
+          <label>password:</label>
+          <input type="password" name="username" value="" id="passwordId"/>
+        </div>
+
+       <div class="email-div">
+        <div class="form-div margin-for-email">
+          <label>email:</label>
+          <input type="email" name="email" value="" id="emailId"/>
+        </div>
+        <button type="button" onclick="ckeckEmailUse()">檢查是否有使用過</button>
+        <div id="forCheck" class="for-check"></div>
+       </div>
+
+        <div class="form-div">
+          <label>age:</label>
+          <input type="text" name="age" value="" id="ageId"/>
+        </div class="form-div">
+        <div class="form-div">
+          <label>address:</label>
+          <input type="text" name="address" value="" id="addressId"/>
+        </div class="form-div">
+        <div class="form-div">
+          <label>phone:</label>
+          <input type="text" name="phone" value="" id="phoneId"/>
+        </div>
+       <div class="form-div" onclick="send()"><span>SUBMIT</span></div> 
+        `
+      }
+
+    
+
+
+  var current_page = 1;
+  var records_per_page = 4;
+  var search = false    
+  var obj = {
+    userList:[],
+    get:async function getData() {
+      const response =await fetch(`http://127.0.0.1:${port}/api/student/`)
+      const data = await response.json();
+      this.userList = data
+      return data
+    },
+    search:async  function searchList() {
+      var searchValue = document.getElementById('search-value').value;
+    
+    const data = await fetch(`http://127.0.0.1:${port}/api/search`,{
+      method: "POST", // or 'PUT'
+      body: JSON.stringify({searchValue}), // data can be `string` or {object}!
+      headers: new Headers({
+        "Content-Type": "application/json"
+      })
+    }) .then(res=>res.json()).then(json=>json)
+        return data;
+    }
+
+  }  
+  
+
+ async function postSearchValue(needSearchValue) {
+      search = needSearchValue
+      if(!search){
+        document.getElementById('search-value').value = ''
+      }
+      
+      await changePage(1)
+      document.getElementById('search-value').value = ''
+    }
+
+
+    function prevPage() {
+    if (current_page > 1) {
+        current_page--;
+        changePage(current_page);
+      }
+    }
+ 
+async function nextPage(data) {
+  var stuLength = obj.userList; 
+    if (current_page < await numPages(stuLength)) {
+        current_page++;
+      changePage(current_page); 
+    }
+}
+
+ function innerHtml(obj){
+  var listing_table = document.getElementById("table");
+   if(obj){
+    listing_table.innerHTML+=
+  `<div class="table-user"><span class="text-center">${obj.uid}</span><span class="text-center">${obj.username.toUpperCase()}</span><span class="text-center">${
+    obj.age
+            }</span><span class="text-center">${obj.phone}</span><span class="text-center">${obj.email}</span><button class="cursor" onclick={deleteUser('${
+              obj.uid
+            }')}>DELETE</button><button class="cursor" onclick={modifyUser('${
+              obj.uid
+            }')}>MODIFY</button></button></div>`
+   }else{
+     listing_table.innerHTML = '<div class="no-content">找不到結果</div>'
+   }
+ 
+ 
+
+}
+
+async function changePage(page) {
+    var btn_next = document.getElementById("btn_next");
+    var btn_prev = document.getElementById("btn_prev");
+    var listing_table = document.getElementById("table");
+    var page_span = document.getElementById("page");
+ 
+    var searchValue = await obj.search()
+    var stuLength = search ?  searchValue : await obj.get();  
+    // Validate page
+    if (page < 1) page = 1;
+    if (page > await numPages(stuLength)) page = await numPages(stuLength);
+
+    listing_table.innerHTML = "";
+    for (var i = (page-1) * records_per_page; i < (page * records_per_page)&& i < stuLength.length; i++) {
+       innerHtml(stuLength[i])
+    }
+    page_span.innerHTML = page;
+
+    if (page == 1) {
+        btn_prev.style.visibility = "hidden";
+    } else {
+        btn_prev.style.visibility = "visible";
+    }
+  
+     if (page == await numPages(stuLength)) {
+        btn_next.style.visibility = "hidden";
+     } else {
+        btn_next.style.visibility = "visible";
+     }
+   }
+
+
+ function numPages(paginationTryValue) { 
+    var stuLength = paginationTryValue; 
+
+    return  Math.ceil(stuLength.length / records_per_page);
+  } 
+  window.onload = function() {
+    changePage(1);
+  };
+
+  </script>
+</html>
